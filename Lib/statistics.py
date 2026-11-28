@@ -679,8 +679,8 @@ def covariance(x, y, /):
         raise StatisticsError('covariance requires that both inputs have same number of data points')
     if n < 2:
         raise StatisticsError('covariance requires at least two data points')
-    xbar = fsum(x) / n
-    ybar = fsum(y) / n
+    xbar = mean(x)
+    ybar = mean(y)
     sxy = sumprod((xi - xbar for xi in x), (yi - ybar for yi in y))
     return sxy / (n - 1)
 
@@ -725,8 +725,8 @@ def correlation(x, y, /, *, method='linear'):
         y = _rank(y, start=start)
 
     else:
-        xbar = fsum(x) / n
-        ybar = fsum(y) / n
+        xbar = mean(x)
+        ybar = mean(y)
         x = [xi - xbar for xi in x]
         y = [yi - ybar for yi in y]
 
@@ -789,8 +789,8 @@ def linear_regression(x, y, /, *, proportional=False):
         raise StatisticsError('linear regression requires at least two data points')
 
     if not proportional:
-        xbar = fsum(x) / n
-        ybar = fsum(y) / n
+        xbar = mean(x)
+        ybar = mean(y)
         x = [xi - xbar for xi in x]  # List because used three times below
         y = (yi - ybar for yi in y)  # Generator because only used once below
 

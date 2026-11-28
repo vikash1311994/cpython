@@ -1,0 +1,5 @@
+Fix :func:`statistics.correlation`, :func:`statistics.covariance` and
+:func:`statistics.linear_regression` losing precision when centering data
+whose mean is a large integer.  The mean is now computed exactly before
+subtraction, so perfectly correlated large timestamps are no longer
+reported with the wrong sign or magnitude.

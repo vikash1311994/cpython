@@ -2737,6 +2737,19 @@ class TestCorrelationAndCovariance(unittest.TestCase):
             self.assertAlmostEqual(statistics.correlation(x, y), result)
             self.assertAlmostEqual(statistics.covariance(x, y), result)
 
+    def test_large_integer_inputs(self):
+        # gh-162743: centering on a mean rounded by fsum() loses precision
+        # and can even flip the sign of a perfect correlation.
+        epoch = 1_700_000_000_000_000_000
+        x = [epoch + offset for offset in (256, 512, 768)]
+        y = [t + 1024 for t in x]
+
+        self.assertEqual(statistics.correlation(x, y), 1.0)
+        self.assertEqual(statistics.covariance(x, y), 65536.0)
+        slope, intercept = statistics.linear_regression(x, y)
+        self.assertEqual(slope, 1.0)
+        self.assertEqual(intercept, 1024.0)
+
     def test_different_scales(self):
         x = [1, 2, 3]
         y = [10, 30, 20]
